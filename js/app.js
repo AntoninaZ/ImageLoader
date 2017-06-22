@@ -1,7 +1,7 @@
 var Loader = (function() {
-	
 	'use strict';
 	return {
+		loadedAll: 0,
 		init: function() {
 			
 			this.loader = document.getElementById('loader');
@@ -10,49 +10,39 @@ var Loader = (function() {
 			this.images = document.getElementsByTagName('img');
 			
 			this.events();
-			for (var i = 0; i < Loader.images.length; i++) {
-				this.loadImage(i);
-			}
+			this.loadImage();
 		},
 
 		events: function() {
-			for (var i = 0; i < Loader.images.length - 1; i++) {
-				//Loader.images[i].addEventListener('load', Loader.loadImage(i));
-			}
 		},
 
-		loadImage: function(i) {
-			// call this function on image load or error event
-			if (Loader.images[i].complete) {
-				Loader.loadedCallback();
-
-			} else {
-			  Loader.images[i].addEventListener('load', Loader.loadedCallback);
-			  Loader.images[i].addEventListener('error', function() {
-			    console.log('error');
-			  })
-			}
-			/*var progress = 0;
-			var additing = 100 / Loader.images.length;
+		loadImage: function() {
 			for (var i = 0; i < Loader.images.length; i++) {
-				
-					progress += additing;
-					Loader.increaseProgressBar(progress);
-				if (!Loader.images[i].complete) {
-					console.log(false);
-				} 
-			}*/
+				if (Loader.images[i].complete) {
+					Loader.loadedCallback();
+				} else {
+					Loader.images[i].addEventListener('load', Loader.loadedCallback);
+					Loader.images[i].addEventListener('error', Loader.errorCallback);
+				}
+			}
 		},
 
-		increaseProgressBar: function(progress) {
-			// use this method to increase progress bar percentage and color filling
+		increaseProgressBar: function() {
+			Loader.loadedAll++;
+			var progress = (Loader.loadedAll * 100) / Loader.images.length;
 			Loader.preogressBar.style.width = progress + '%';
 			Loader.loaderPercent.innerHTML = Math.round(progress) + '%';
 		},
 
 		loadedCallback: function() {
-			 // call this function once images will be loaded. Put code inside this method which will hide progress bar.
-			console.log('loaded');
+			Loader.increaseProgressBar();
+			if (Loader.loadedAll === Loader.images.length) {
+				Loader.loader.classList.add('loaded');
+			}
+		},
+
+		errorCallback: function() {
+			Loader.loadedCallback();
 		}
 	};
 })();
