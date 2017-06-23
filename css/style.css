@@ -4,6 +4,9 @@
 	margin: 2px;
 	vertical-align: top;
 }
+.error {
+	background-color: #bbb;
+}
 .loader {
 	display: flex;
 	align-items: center;

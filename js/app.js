@@ -43,6 +43,7 @@ var Loader = (function() {
 
 		errorCallback: function() {
 			Loader.loadedCallback();
+			this.classList.add('error');
 		}
 	};
 })();
